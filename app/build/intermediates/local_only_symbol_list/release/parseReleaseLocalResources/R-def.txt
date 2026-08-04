@@ -1,0 +1,19 @@
+R_DEF: Internal format may change without notice
+local
+string app_name
+string botao_buscar
+string botao_limpar
+string carregando
+string descricao_icone_scanner
+string erro_generico
+string fechar_scanner
+string label_campo_busca
+string nenhum_resultado
+string permissao_camera_mensagem
+string permissao_camera_negada
+string permissao_camera_titulo
+string placeholder_campo_busca
+string resultado_item_count
+string titulo_resultado
+string titulo_tela
+style Theme.BuscaMaterial

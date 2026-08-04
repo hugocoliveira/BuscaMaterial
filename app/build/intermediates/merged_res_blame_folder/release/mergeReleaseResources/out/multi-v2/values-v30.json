@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "br.com.lit.busca.material.app-mergeReleaseResources-55:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\hugo\\.gradle\\caches\\transforms-4\\6f28ac4543c3acd3d5daf568d80a1a88\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}

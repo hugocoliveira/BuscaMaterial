@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nome do aplicativo exibido no sistema -->
+    <string name="app_name">Busca Material</string>
+
+    <!-- TopAppBar -->
+    <string name="titulo_tela">Busca Material</string>
+
+    <!-- Campo de busca -->
+    <string name="label_campo_busca">Código ou valor</string>
+    <string name="placeholder_campo_busca">Digite ou escaneie o código</string>
+    <string name="botao_buscar">Buscar</string>
+    <string name="botao_limpar">Limpar</string>
+    <string name="descricao_icone_scanner">Abrir câmera para escanear código</string>
+
+    <!-- Estados de UI -->
+    <string name="carregando">Carregando…</string>
+    <string name="nenhum_resultado">Nenhum resultado encontrado.</string>
+    <string name="erro_generico">Erro ao buscar dados. Verifique a conexão.</string>
+
+    <!-- Câmera / Scanner -->
+    <string name="permissao_camera_titulo">Permissão de câmera</string>
+    <string name="permissao_camera_mensagem">O app precisa de acesso à câmera para escanear códigos.</string>
+    <string name="permissao_camera_negada">Permissão de câmera negada. Use a digitação manual.</string>
+    <string name="fechar_scanner">Fechar scanner</string>
+
+    <!-- Resultado -->
+    <string name="titulo_resultado">Resultado</string>
+    <string name="resultado_item_count">%d item(s) encontrado(s)</string>
+</resources>
