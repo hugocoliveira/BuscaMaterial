@@ -33,6 +33,16 @@
             <!-- Sem intent-filter LAUNCHER: ícone não aparece para o usuário final -->
         </activity>
 
+        <!--
+            Alias expõe o componente como br.com.lit.busca.material.MainActivity,
+            que é o ComponentName que o MenuAutomatico usa na Intent explícita.
+            Necessário porque a Activity real está no subpackage .ui
+        -->
+        <activity-alias
+            android:name=".MainActivity"
+            android:targetActivity=".ui.MainActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
