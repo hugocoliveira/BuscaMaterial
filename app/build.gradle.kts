@@ -24,6 +24,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // Credenciais SAP — lidas do local.properties (gitignored), nunca expostas no código-fonte
+        buildConfigField("String", "SAP_USERNAME", "\"${localProps.getProperty("sap.username", "")}\"")
+        buildConfigField("String", "SAP_PASSWORD", "\"${localProps.getProperty("sap.password", "")}\"")
+
         // Vetor de suporte para API < 21 (redundante aqui mas boa prática)
         vectorDrawables { useSupportLibrary = true }
     }
@@ -59,7 +63,8 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        compose      = true
+        buildConfig  = true
     }
 
     composeOptions {

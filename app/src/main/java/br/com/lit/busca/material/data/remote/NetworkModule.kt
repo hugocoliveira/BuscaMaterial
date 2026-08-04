@@ -1,5 +1,6 @@
 package br.com.lit.busca.material.data.remote
 
+import br.com.lit.busca.material.BuildConfig
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,18 +10,16 @@ import java.util.concurrent.TimeUnit
 
 // ---------------------------------------------------------------------------
 // Módulo de rede — constrói e expõe o singleton do ApiService.
-// Credenciais de Basic Auth fixas conforme especificação do projeto.
-// ponytail: singleton manual (sem Hilt) — adicionar Hilt se o app crescer.
+// Credenciais injetadas via BuildConfig (valores vêm de local.properties,
+// gitignored — nunca aparecem no código-fonte commitado).
 // ---------------------------------------------------------------------------
 
 /** URL base do servidor SAP. */
 private const val BASE_URL = "http://vm77.4hub.cloud:57700/"
 
-/** Usuário SAP para autenticação Basic Auth. */
-private const val SAP_USER = "HOLIVEIRA"
-
-/** Senha SAP para autenticação Basic Auth. */
-private const val SAP_PASS = "*Hugo753951"
+/** Credenciais SAP via BuildConfig — origem: local.properties (gitignored). */
+private val SAP_USER get() = BuildConfig.SAP_USERNAME
+private val SAP_PASS get() = BuildConfig.SAP_PASSWORD
 
 /**
  * Objeto singleton que fornece a instância configurada de [ApiService].
