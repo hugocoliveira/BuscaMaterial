@@ -16,23 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.lit.busca.material.ui.theme.BuscaMaterialTheme
 import com.google.gson.JsonObject
 
-// ---------------------------------------------------------------------------
-// Card genérico para exibir um objeto de resultado da API.
-// Lê dinamicamente todas as chaves/valores do JsonObject sem assumir campos
-// fixos — garante que qualquer campo retornado pelo SAP seja exibido.
-// ---------------------------------------------------------------------------
-
-/**
- * Card que exibe todos os campos de um [JsonObject] em pares chave → valor.
- * Sem campos fixos: itera todas as entradas do objeto dinamicamente.
- *
- * @param objeto    objeto JSON com os campos do material.
- * @param indice    posição na lista — exibida como rótulo do card (ex: "Item 1").
- * @param modifier  modificador opcional para personalização externa.
- */
 @Composable
 fun ResultCard(
     objeto: JsonObject,
@@ -42,77 +30,91 @@ fun ResultCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp),
-        shape     = RoundedCornerShape(12.dp),
+            // ponytail: 4dp (era 6dp) — menos espaço entre cards em tela 16×20
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        // ponytail: 6dp (era 12dp) — cantos menos arredondados ficam mais densos em coletor
+        shape     = RoundedCornerShape(6.dp),
         colors    = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            // ponytail: 10dp (era 16dp) — padding interno comprimido para coletor 16×20
+            modifier = Modifier.padding(10.dp)
         ) {
-            // Cabeçalho do card com o número do item
             Text(
-                text  = "Item ${indice + 1}",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
+                text       = "Item ${indice + 1}",
+                style      = MaterialTheme.typography.titleMedium,
+                color      = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-            // Itera dinamicamente todas as entradas do JsonObject
-            objeto.entrySet().forEach { (chave, valor) ->
-                // Formata o valor: remove aspas extras do JsonPrimitive
+            val campos = listOf(
+                "Material"            to "Material",
+                "MaterialDescription" to "Descrição material",
+                "Ean"                 to "EAN",
+                "NetWeight"           to "Peso líquido",
+                "WeightUnit"          to "Unidade de peso",
+                "Volume"              to "Volume",
+                "VolumeUnit"          to "Unidade do volume",
+                "MaterialGroup"       to "Grupo de mercadoria"
+            )
+            campos.forEach { (chaveApi, rotulo) ->
+                val elemento = objeto.get(chaveApi)
                 val valorTexto = when {
-                    valor.isJsonNull    -> "—"
-                    valor.isJsonPrimitive -> valor.asString
-                    else                -> valor.toString()
+                    elemento == null || elemento.isJsonNull -> "—"
+                    elemento.isJsonPrimitive               -> elemento.asString
+                    else                                   -> elemento.toString()
                 }
-
-                // Linha: Chave → Valor
-                CampoLinha(chave = chave, valor = valorTexto)
-
-                Spacer(modifier = Modifier.height(4.dp))
+                CampoLinha(chave = rotulo, valor = valorTexto)
+                Spacer(modifier = Modifier.height(2.dp))
             }
         }
     }
 }
 
-// ---------------------------------------------------------------------------
-// Componente auxiliar — linha de um campo com rótulo e valor.
-// ---------------------------------------------------------------------------
+@Preview(showBackground = true)
+@Composable
+private fun ResultCardPreview() {
+    BuscaMaterialTheme {
+        val objeto = JsonObject().apply {
+            addProperty("Material", "MAT-001234")
+            addProperty("Descrição", "Parafuso M6 x 20mm Inox")
+            addProperty("Unidade", "PC")
+            addProperty("Estoque", "250")
+            addProperty("Depósito", "0001")
+        }
+        ResultCard(objeto = objeto, indice = 0)
+    }
+}
 
-/**
- * Linha simples "chave: valor" para exibição de campos do resultado.
- *
- * @param chave nome do campo (retornado pela API).
- * @param valor texto do valor a ser exibido.
- */
 @Composable
 private fun CampoLinha(chave: String, valor: String) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        // Rótulo do campo (chave)
+        // Rótulo (chave) — secundário, bodySmall
         Text(
-            text     = "$chave:",
-            style    = MaterialTheme.typography.bodySmall,
-            color    = MaterialTheme.colorScheme.onSurfaceVariant,
+            text       = "$chave:",
+            style      = MaterialTheme.typography.bodySmall,
+            color      = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.width(140.dp)
+            // ponytail: 120dp (era 140dp) — chave mais compacta, valor ganha mais espaço
+            modifier   = Modifier.width(120.dp)
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(6.dp))
 
-        // Valor do campo
+        // Valor — dado primário, bodyMedium (14sp) para leitura com luvas em coletor
         Text(
-            text  = valor,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            text     = valor,
+            style    = MaterialTheme.typography.bodyMedium,
+            color    = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
     }
