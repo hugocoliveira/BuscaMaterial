@@ -19,8 +19,8 @@ android {
         applicationId   = "br.com.lit.busca.material"
         minSdk          = 24
         targetSdk       = 36
-        versionCode     = 5
-        versionName     = "1.4"
+        versionCode     = 6
+        versionName     = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -30,6 +30,8 @@ android {
 
         // Vetor de suporte para API < 21 (redundante aqui mas boa prática)
         vectorDrawables { useSupportLibrary = true }
+        // Apenas arm64 e arm32 — exclui x86/x86_64 (não usados nos coletores Zebra)
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
     }
 
     // Assinatura release — valores vêm do local.properties, nunca hardcoded no git
