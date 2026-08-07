@@ -146,16 +146,14 @@ private fun ConteudoPrincipal(
 ) {
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
-    val nenhumResultado = !uiState.carregando
-        && uiState.resultados.isEmpty()
-        && uiState.campoBusca.isNotBlank()
-        && uiState.erro == null
 
-    androidx.compose.runtime.LaunchedEffect(nenhumResultado) {
-        if (nenhumResultado) {
+    // Toca som e retorna foco quando busca não encontra resultados
+    LaunchedEffect(uiState.semResultados) {
+        if (uiState.semResultados) {
             val mp = MediaPlayer.create(context, R.raw.error)
             mp?.start()
             mp?.setOnCompletionListener { it.release() }
+            runCatching { focusRequester.requestFocus() }
         }
     }
 
@@ -254,9 +252,7 @@ private fun ConteudoPrincipal(
         }
 
         // Nenhum resultado
-        if (!uiState.carregando && uiState.resultados.isEmpty()
-            && uiState.campoBusca.isNotBlank() && uiState.erro == null
-        ) {
+        if (uiState.semResultados) {
             item {
                 Box(
                     modifier         = Modifier

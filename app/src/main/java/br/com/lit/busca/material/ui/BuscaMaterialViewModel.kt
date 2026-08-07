@@ -26,11 +26,12 @@ import kotlinx.coroutines.launch
  * @property scannerAberto  true quando a tela de câmera está visível.
  */
 data class BuscaUiState(
-    val campoBusca: String      = "",
-    val carregando: Boolean     = false,
-    val erro: String?           = null,
+    val campoBusca: String           = "",
+    val carregando: Boolean          = false,
+    val erro: String?                = null,
     val resultados: List<JsonObject> = emptyList(),
-    val scannerAberto: Boolean  = false
+    val scannerAberto: Boolean       = false,
+    val semResultados: Boolean       = false
 )
 
 /**
@@ -110,23 +111,22 @@ class BuscaMaterialViewModel : ViewModel() {
      */
     private fun buscar(valor: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            // Indica loading e limpa estado anterior
-            _uiState.update { it.copy(carregando = true, erro = null, resultados = emptyList()) }
+            _uiState.update { it.copy(carregando = true, erro = null, resultados = emptyList(), semResultados = false) }
 
             repositorio.buscar(valor).fold(
                 onSuccess = { lista ->
                     _uiState.update {
-                        // Limpa o campo só quando há resultados — sem resultados mantém o texto
-                        // para que a condição nenhumResultado dispare som e mensagem de erro
-                        it.copy(carregando = false, resultados = lista, campoBusca = if (lista.isNotEmpty()) "" else it.campoBusca)
+                        it.copy(
+                            carregando    = false,
+                            resultados    = lista,
+                            campoBusca    = "",
+                            semResultados = lista.isEmpty()
+                        )
                     }
                 },
                 onFailure = { excecao ->
                     _uiState.update {
-                        it.copy(
-                            carregando = false,
-                            erro = excecao.message ?: "Erro desconhecido"
-                        )
+                        it.copy(carregando = false, erro = excecao.message ?: "Erro desconhecido")
                     }
                 }
             )
