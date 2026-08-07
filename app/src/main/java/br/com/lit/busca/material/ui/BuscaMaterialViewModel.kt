@@ -116,7 +116,9 @@ class BuscaMaterialViewModel : ViewModel() {
             repositorio.buscar(valor).fold(
                 onSuccess = { lista ->
                     _uiState.update {
-                        it.copy(carregando = false, resultados = lista, campoBusca = "")
+                        // Limpa o campo só quando há resultados — sem resultados mantém o texto
+                        // para que a condição nenhumResultado dispare som e mensagem de erro
+                        it.copy(carregando = false, resultados = lista, campoBusca = if (lista.isNotEmpty()) "" else it.campoBusca)
                     }
                 },
                 onFailure = { excecao ->
