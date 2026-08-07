@@ -36,11 +36,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -142,6 +145,7 @@ private fun ConteudoPrincipal(
     onAbrirScanner: () -> Unit
 ) {
     val context = LocalContext.current
+    val focusRequester = remember { FocusRequester() }
     val nenhumResultado = !uiState.carregando
         && uiState.resultados.isEmpty()
         && uiState.campoBusca.isNotBlank()
@@ -153,6 +157,11 @@ private fun ConteudoPrincipal(
             mp?.start()
             mp?.setOnCompletionListener { it.release() }
         }
+    }
+
+    // Retorna foco ao campo após exibir resultados para leitura imediata do próximo código
+    LaunchedEffect(uiState.resultados) {
+        if (uiState.resultados.isNotEmpty()) runCatching { focusRequester.requestFocus() }
     }
 
     LazyColumn(
@@ -173,7 +182,7 @@ private fun ConteudoPrincipal(
                     onBuscar       = onBuscar,
                     onAbrirScanner = onAbrirScanner,
                     onLimpar       = onLimpar,
-                    modifier       = Modifier.fillMaxWidth()
+                    modifier       = Modifier.fillMaxWidth().focusRequester(focusRequester)
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))

@@ -116,7 +116,7 @@ class BuscaMaterialViewModel : ViewModel() {
             repositorio.buscar(valor).fold(
                 onSuccess = { lista ->
                     _uiState.update {
-                        it.copy(carregando = false, resultados = lista)
+                        it.copy(carregando = false, resultados = lista, campoBusca = "")
                     }
                 },
                 onFailure = { excecao ->
