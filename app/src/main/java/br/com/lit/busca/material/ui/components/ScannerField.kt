@@ -96,7 +96,7 @@ fun ScannerField(
         // Teclado alfanumérico — cobre EAN numérico e códigos alfanuméricos SAP
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
-            imeAction    = ImeAction.Search
+            imeAction    = ImeAction.None
         ),
 
         // Ação do botão "Buscar" no teclado virtual
