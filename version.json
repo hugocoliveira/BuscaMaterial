@@ -1,1 +1,1 @@
-{"versionCode":16,"versionName":"2.5","apkUrl":"https://github.com/hugocoliveira/BuscaMaterial/releases/download/v2.5/app-release.apk","releaseNotes":"feat: ImeAction.None para suprimir teclado virtual completamente."}
+{"versionCode":17,"versionName":"2.6","apkUrl":"https://github.com/hugocoliveira/BuscaMaterial/releases/download/v2.6/app-release.apk","releaseNotes":"revert: ImeAction.Search restaurado."}
