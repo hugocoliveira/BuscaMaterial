@@ -4,7 +4,7 @@
     <string name="app_name">Busca Material</string>
 
     <!-- TopAppBar -->
-    <string name="titulo_tela">Busca Material</string>
+    <string name="titulo_tela">EAN</string>
 
     <!-- Campo de busca -->
     <string name="label_campo_busca">Código ou valor</string>
