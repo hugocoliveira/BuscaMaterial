@@ -46,6 +46,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -146,10 +147,11 @@ private fun ConteudoPrincipal(
 ) {
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Toca som e retorna foco quando busca não encontra resultados
     LaunchedEffect(uiState.semResultados) {
         if (uiState.semResultados) {
+            keyboardController?.hide()
             val mp = MediaPlayer.create(context, R.raw.error)
             mp?.start()
             mp?.setOnCompletionListener { it.release() }
@@ -157,9 +159,11 @@ private fun ConteudoPrincipal(
         }
     }
 
-    // Retorna foco ao campo após exibir resultados para leitura imediata do próximo código
     LaunchedEffect(uiState.resultados) {
-        if (uiState.resultados.isNotEmpty()) runCatching { focusRequester.requestFocus() }
+        if (uiState.resultados.isNotEmpty()) {
+            keyboardController?.hide()
+            runCatching { focusRequester.requestFocus() }
+        }
     }
 
     LazyColumn(
