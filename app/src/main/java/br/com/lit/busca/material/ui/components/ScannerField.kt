@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
@@ -58,10 +59,12 @@ fun ScannerField(
         onValueChange = onValorChange,
         // onKeyEvent captura eventos do scanner físico Zebra (infravermelho) e fecha o teclado virtual.
         // Toque do usuário usa InputConnection e não passa por aqui, então o teclado ainda abre ao digitar.
-        modifier      = modifier.onKeyEvent { keyEvent ->
-            if (keyEvent.type == KeyEventType.KeyDown) keyboardController?.hide()
-            false
-        },
+        modifier      = modifier
+            .onFocusChanged { if (it.isFocused) keyboardController?.hide() }
+            .onKeyEvent { keyEvent ->
+                if (keyEvent.type == KeyEventType.KeyDown) keyboardController?.hide()
+                false
+            },
         label         = { Text(stringResource(R.string.label_campo_busca)) },
         placeholder   = { Text(stringResource(R.string.placeholder_campo_busca)) },
         singleLine    = true,
