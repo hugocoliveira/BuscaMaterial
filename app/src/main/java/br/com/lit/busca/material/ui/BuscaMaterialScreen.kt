@@ -149,6 +149,13 @@ private fun ConteudoPrincipal(
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    // Foca o campo ao abrir o app — cursor pronto para bipar sem abrir o teclado virtual
+    LaunchedEffect(Unit) {
+        runCatching { focusRequester.requestFocus() }
+        kotlinx.coroutines.delay(100)
+        keyboardController?.hide()
+    }
+
     LaunchedEffect(uiState.semResultados) {
         if (uiState.semResultados) {
             val mp = MediaPlayer.create(context, R.raw.error)
